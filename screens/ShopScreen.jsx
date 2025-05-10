@@ -1,41 +1,60 @@
 import React from 'react';
-import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, FlatList, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import products from '../data/Products';
 
 const ShopScreen = ({ navigation }) => {
   const renderItem = ({ item }) => (
-    <TouchableOpacity 
-      style={styles.item} 
+    <TouchableOpacity
+      style={styles.productContainer}
       onPress={() => navigation.navigate('ProductDetails', { product: item })}
     >
       <Image source={item.image} style={styles.image} />
-      <View style={styles.info}>
-        <Text style={styles.title}>{item.name}</Text>
-        <Text style={styles.price}>₹{item.price}</Text>
-      </View>
+      <Text style={styles.name}>{item.name}</Text>
+      <Text style={styles.price}>₹{item.price}</Text>
     </TouchableOpacity>
   );
 
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>Shop Artworks 🛒</Text>
       <FlatList
         data={products}
-        renderItem={renderItem}
         keyExtractor={(item) => item.id.toString()}
+        renderItem={renderItem}
+        numColumns={2}
       />
     </View>
   );
 };
 
-export default ShopScreen;
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20 },
-  heading: { fontSize: 24, fontWeight: 'bold', marginBottom: 20 },
-  item: { flexDirection: 'row', marginBottom: 20, alignItems: 'center' },
-  image: { width: 80, height: 80, borderRadius: 10, marginRight: 15 },
-  info: { flex: 1 },
-  title: { fontSize: 18 },
-  price: { fontSize: 16, color: 'gray' },
+  container: {
+    padding: 10,
+  },
+  productContainer: {
+    flex: 1,
+    margin: 10,
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 10,
+    alignItems: 'center',
+    elevation: 3,
+  },
+  image: {
+    width: 120,
+    height: 120,
+    borderRadius: 10,
+  },
+  name: {
+    fontWeight: 'bold',
+    marginTop: 5,
+    textAlign: 'center',
+  },
+  price: {
+    color: '#ff6f61',
+    marginTop: 5,
+  },
 });
+
+export default ShopScreen;
+

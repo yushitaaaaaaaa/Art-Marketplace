@@ -26,7 +26,6 @@ exports.sendOTP = async (req, res) => {
     const verification = await client.verify.v2
       .services(serviceSid)
       .verifications.create({ to: `+91${phone}`, channel: "sms" });
-    
     console.log(`OTP sent successfully to +91${phone}, status: ${verification.status}`);
     res.status(200).json({ message: "OTP sent successfully", status: verification.status });
   } catch (error) {
@@ -48,7 +47,6 @@ exports.verifyOTP = async (req, res) => {
     console.log(`Missing required fields: phone=${phone}, code=${code ? 'provided' : 'missing'}`);
     return res.status(400).json({ message: "Phone number and OTP code are required" });
   }
-  
   try {
     const verificationCheck = await client.verify.v2
       .services(serviceSid)

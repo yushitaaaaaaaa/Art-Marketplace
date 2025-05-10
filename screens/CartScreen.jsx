@@ -48,7 +48,6 @@ const CartScreen = () => {
 
   return (
     <View style={styles.container}>
-      
       {cartItems.length === 0 ? (
         <View style={styles.emptyContainer}>
           <Text style={styles.emptyText}>Your cart is empty</Text>

@@ -6,7 +6,6 @@ import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../context/AuthContext';
 import { Ionicons } from '@expo/vector-icons'; 
 
-
 const API_URL = 'http://192.168.29.34:4545/api';
 
 export const LoginScreen = () => {

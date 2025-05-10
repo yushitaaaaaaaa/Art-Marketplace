@@ -57,24 +57,12 @@ const ProfileScreen = () => {
       setLoadingOrders(false);
     }
   };
-  // const fetchOrders = async () => {
-  //   try {
-  //     setLoadingOrders(true);
-  //     const res = await axios.get(`http://192.168.29.34:4545/orders/${user.phone}`);
-  //     setOrders(res.data);
-  //   } catch (error) {
-  //     console.error("Failed to fetch orders:", error);
-  //   } finally {
-  //     setLoadingOrders(false);
-  //   }
-  // };
 
   const handleSave = async () => {
     try {
       setLoading(true);
       const updated = { phone: user.phone, name, email, age: parseInt(age) || 0 };
       await axios.put("http://192.168.29.34:4545/api/update-profile", updated);
-
       setUser((prevUser) => ({
         ...prevUser,
         name,
@@ -88,7 +76,6 @@ const ProfileScreen = () => {
         email,
         age: parseInt(age) || 0,
       }));
-
       Alert.alert("Success", "Profile updated successfully");
     } catch (error) {
       console.error(error);
@@ -112,7 +99,7 @@ const ProfileScreen = () => {
           onPress: async () => {
             await AsyncStorage.removeItem("user");
             logout();
-            
+
             Alert.alert("Logged Out", "You have been logged out successfully.");
           },
           style: "destructive"

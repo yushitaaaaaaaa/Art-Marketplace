@@ -1,8 +1,16 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const { createOrder, getUserOrders } = require("../controllers/orderController");
+const Order = require('../models/Order');
 
-router.post("/order", createOrder);
-router.get("/orders/:phone", getUserOrders);
+router.post('/api/orders', async (req, res) => {
+  try {
+    const order = new Order(req.body);
+    await order.save();
+    res.status(201).json({ message: 'Order placed successfully' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to place order' });
+  }
+});
 
 module.exports = router;

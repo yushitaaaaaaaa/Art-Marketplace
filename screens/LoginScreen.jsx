@@ -17,44 +17,19 @@ export const LoginScreen = () => {
 
   const sendOtp = async () => {
     try {
-      // Validate phone number
+
       if (!phone || phone.length !== 10 || isNaN(phone)) {
         Alert.alert('Invalid Number', 'Please enter a valid 10-digit phone number');
         return;
       }
-
       setLoading(true);
       const res = await axios.post(`${API_URL}/send-otp`, { phone });
       
-      if (res.status === 200) {
-        setOtpSent(true);
-        Alert.alert('OTP Sent', `OTP has been sent to +91${phone}`);
-      }
-    } catch (err) {
-      console.error('OTP Error:', err.response?.data || err.message);
-      const errorMessage = err.response?.data?.message || 'Failed to send OTP. Please try again.';
-      Alert.alert('Error', errorMessage);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const verifyOtp = async () => {
-    try {
-      if (!otp || otp.length < 4) {
-        Alert.alert('Invalid OTP', 'Please enter a valid 4-digit OTP');
-        return;
-      }
-
       setLoading(true);
-      const res = await axios.post(`${API_URL}/verify-otp`, { 
-        phone, 
-        code: otp 
-      });
-
-
+      const res = await axios.post(`${API_URL}/verify-otp`, { phone, code: otp });
       if (res.status === 200 && res.data.user) {
-        login(res.data.user); 
+        login(res.data.user);
+
         Alert.alert('Success', 'You are now logged in!');
       }
     } catch (err) {
@@ -67,22 +42,17 @@ export const LoginScreen = () => {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={{ flex: 1 }}
-    >
-      <ScrollView
-        contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}
-        keyboardShouldPersistTaps="handled"
-      >
+    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 1 }}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }} keyboardShouldPersistTaps="handled">
+      <Header title="Login" />
         <View style={styles.container}>
-          <Text style={styles.heading}>Art Marketplace</Text>
-  
-          <View style={styles.wrapper}>
-            <Text style={styles.label}>Enter Phone Number</Text>
+          <Text style={styles.heading}>Welcome!!</Text>
+
+          <View style={styles.card}>
+            <Text style={styles.label}>Phone Number</Text>
             <TextInput
               placeholder="10-digit mobile number"
-              placeholderTextColor="#999"
+              placeholderTextColor="#aaa"
               keyboardType="phone-pad"
               maxLength={10}
               value={phone}
@@ -90,25 +60,17 @@ export const LoginScreen = () => {
               style={styles.input}
               editable={!loading}
             />
-            <TouchableOpacity 
-              onPress={sendOtp} 
-              style={styles.button}
-              disabled={loading}
-            >
-              {loading ? (
-                <ActivityIndicator color="#fff" />
-              ) : (
-                <Text style={styles.btnText}>Send OTP</Text>
-              )}
+            <TouchableOpacity onPress={sendOtp} style={styles.button} disabled={loading}>
+              {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>Send OTP</Text>}
             </TouchableOpacity>
           </View>
-  
+
           {otpSent && (
-            <View style={styles.wrapper}>
-              <Text style={styles.label}>Enter OTP</Text>
+            <View style={styles.card}>
+              <Text style={styles.label}>OTP</Text>
               <TextInput
-                placeholder="6-digit OTP"
-                placeholderTextColor="#999"
+                placeholder="Enter 6-digit OTP"
+                placeholderTextColor="#aaa"
                 keyboardType="number-pad"
                 maxLength={6}
                 value={otp}
@@ -116,16 +78,9 @@ export const LoginScreen = () => {
                 style={styles.input}
                 editable={!loading}
               />
-              <TouchableOpacity 
-                onPress={verifyOtp} 
-                style={styles.button}
-                disabled={loading}
-              >
-                {loading ? (
-                  <ActivityIndicator color="#fff" />
-                ) : (
-                  <Text style={styles.btnText}>Verify OTP</Text>
-                )}
+
+              <TouchableOpacity onPress={verifyOtp} style={styles.button} disabled={loading}>
+                {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>Verify OTP</Text>}
               </TouchableOpacity>
             </View>
           )}
@@ -133,53 +88,54 @@ export const LoginScreen = () => {
       </ScrollView>
     </KeyboardAvoidingView>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  container: { 
-    padding: 20, 
-    flex: 1, 
+  container: {
+    padding: 20,
+    flex: 1,
+    backgroundColor: '#f9f9f9',
     justifyContent: 'center',
-    backgroundColor: '#f5f5f5'
   },
-  heading: { 
-    fontSize: 24, 
-    fontWeight: 'bold', 
-    marginBottom: 30, 
+  heading: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#ff6f61',
     textAlign: 'center',
-    color: '#ff6f61'
+    marginBottom: 30,
   },
-  wrapper: { 
-    marginBottom: 25,
+  card: {
     backgroundColor: '#fff',
     padding: 20,
-    borderRadius: 10,
-    elevation: 3
+    borderRadius: 12,
+    elevation: 4,
+    marginBottom: 20,
   },
   label: {
     fontSize: 16,
-    marginBottom: 5,
-    color: '#333'
+    color: '#333',
+    marginBottom: 8,
+    fontWeight: '600',
   },
-  input: { 
-    borderWidth: 1, 
-    borderColor: '#ddd',
-    padding: 15, 
-    marginVertical: 10,
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    padding: 12,
     borderRadius: 8,
     fontSize: 16,
-    backgroundColor: '#fafafa'
+    backgroundColor: '#fefefe',
   },
-  button: { 
-    backgroundColor: '#ff6f61', 
-    padding: 15, 
-    alignItems: 'center',
+  button: {
+    backgroundColor: '#ff6f61',
+    marginTop: 15,
+    paddingVertical: 14,
     borderRadius: 8,
-    marginTop: 10
+    alignItems: 'center',
   },
-  btnText: { 
+  buttonText: {
     color: '#fff',
     fontSize: 16,
-    fontWeight: '600'
+    fontWeight: '600',
   },
 });
+

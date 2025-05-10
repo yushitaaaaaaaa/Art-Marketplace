@@ -1,5 +1,5 @@
 export default [
-  {
+{
     id: 1,
     name: "Mandala on Canvas",
     category: "Mandala Art",
@@ -180,5 +180,4 @@ export default [
     stock: 2,
   },
 ];
-    
-    
+

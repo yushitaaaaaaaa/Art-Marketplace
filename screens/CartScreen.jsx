@@ -32,9 +32,6 @@ const CartScreen = () => {
           <Text style={styles.total}>Total: ₹{getTotal()}</Text>
         </>
       )}
-    </View>
-  );
-};
 
 const styles = StyleSheet.create({
   container: { padding: 16, flex: 1 },
@@ -47,3 +44,4 @@ const styles = StyleSheet.create({
 });
 
 export default CartScreen;
+

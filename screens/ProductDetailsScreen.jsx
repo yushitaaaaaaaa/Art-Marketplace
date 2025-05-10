@@ -9,7 +9,6 @@ const ProductDetailsScreen = ({ route, navigation }) => {
 
   const handleAddToCart = () => {
     addToCart(product);
-    // Alert.alert("Added to Cart", `${product.name} has been added to your cart.`);
   };
 
   return (

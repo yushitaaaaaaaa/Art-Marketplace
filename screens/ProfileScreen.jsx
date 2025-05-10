@@ -12,10 +12,11 @@ import {
 } from "react-native";
 import { useAuth } from "../context/AuthContext";
 import axios from "axios";
-import { Ionicons } from '@expo/vector-icons'; // Make sure to install expo/vector-icons
+import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ProfileScreen = () => {
-  const { user, logout } = useAuth();
+  const { user, logout, setUser } = useAuth();
   const [orders, setOrders] = useState([]);
   const [name, setName] = useState(user?.name || "");
   const [email, setEmail] = useState(user?.email || "");
@@ -29,13 +30,29 @@ const ProfileScreen = () => {
     }
   }, [user]);
 
+  useEffect(() => {
+    const loadUser = async () => {
+      const storedUser = await AsyncStorage.getItem("user");
+      if (storedUser) {
+        const parsedUser = JSON.parse(storedUser);
+        setName(parsedUser.name || "");
+        setEmail(parsedUser.email || "");
+        setAge(parsedUser.age?.toString() || "");
+      }
+    };
+    loadUser();
+  }, []);
+
   const fetchOrders = async () => {
     try {
       setLoadingOrders(true);
-      const res = await axios.get(`http://192.168.29.34:4545/orders/${user.phone}`);
+      // Make sure this URL matches exactly what your server is expecting
+      const res = await axios.get(`http://192.168.29.34:4545/api/orders/${user.phone}`);
+      console.log('Fetched orders:', res.data);
       setOrders(res.data);
     } catch (error) {
-      console.error("Failed to fetch orders:", error);
+      console.error("Failed to fetch orders:", error.response?.data || error.message);
+      Alert.alert('Error', 'Failed to fetch orders');
     } finally {
       setLoadingOrders(false);
     }
@@ -46,6 +63,19 @@ const ProfileScreen = () => {
       setLoading(true);
       const updated = { phone: user.phone, name, email, age: parseInt(age) || 0 };
       await axios.put("http://192.168.29.34:4545/api/update-profile", updated);
+      setUser((prevUser) => ({
+        ...prevUser,
+        name,
+        email,
+        age: parseInt(age) || 0,
+      }));
+
+      await AsyncStorage.setItem("user", JSON.stringify({
+        ...user,
+        name,
+        email,
+        age: parseInt(age) || 0,
+      }));
       Alert.alert("Success", "Profile updated successfully");
     } catch (error) {
       console.error(error);
@@ -66,8 +96,10 @@ const ProfileScreen = () => {
         },
         {
           text: "Logout",
-          onPress: () => {
+          onPress: async () => {
+            await AsyncStorage.removeItem("user");
             logout();
+
             Alert.alert("Logged Out", "You have been logged out successfully.");
           },
           style: "destructive"
@@ -181,23 +213,22 @@ const ProfileScreen = () => {
             orders.map((order, index) => (
               <View key={index} style={styles.orderItem}>
                 <View style={styles.orderHeader}>
-                  <Text style={styles.orderDate}>{formatDate(order.createdAt)}</Text>
+                  <Text style={styles.orderDate}>{formatDate(order.date)}</Text>
                   <View style={styles.orderStatus}>
-                    <Text style={styles.orderStatusText}>Delivered</Text>
+                    <Text style={styles.orderStatusText}>{order.status || 'Pending'}</Text>
                   </View>
                 </View>
                 
                 <View style={styles.orderDetails}>
                   <Text style={styles.orderItems}>
-                    {order.items.length} item{order.items.length !== 1 ? 's' : ''}
+                    {order.products?.length || 0} item{(order.products?.length || 0) !== 1 ? 's' : ''}
                   </Text>
                   <Text style={styles.orderTotal}>
                     Total: ₹{order.totalAmount || 0}
                   </Text>
                 </View>
               </View>
-            ))
-          )}
+          )))}
         </View>
         
         <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
@@ -206,7 +237,7 @@ const ProfileScreen = () => {
         </TouchableOpacity>
         
         <View style={styles.versionContainer}>
-          <Text style={styles.versionText}>App Version 1.0.0</Text>
+          <Text style={styles.versionText}>Version 1.0.0</Text>
         </View>
       </ScrollView>
     </SafeAreaView>

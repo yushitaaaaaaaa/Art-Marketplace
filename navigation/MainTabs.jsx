@@ -40,7 +40,6 @@ export default function MainTabs() {
       screenOptions={({ route }) => ({
         tabBarIcon: ({ color, size }) => {
           let iconName;
-
           if (route.name === 'Home') {
             iconName = 'home-outline';
           // } else if (route.name === 'Shop') {
@@ -50,7 +49,6 @@ export default function MainTabs() {
           } else if (route.name === 'Profile') {
             iconName = 'person-outline';
           }
-
           return <Ionicons name={iconName} size={size} color={color} />;
         },
         tabBarActiveTintColor: '#ff6f61',
@@ -79,4 +77,3 @@ export default function MainTabs() {
       />
     </Tab.Navigator>
   );
-}

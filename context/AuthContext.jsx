@@ -7,7 +7,6 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  // Load user from AsyncStorage on app load
   useEffect(() => {
     const loadUser = async () => {
       try {
@@ -45,10 +44,13 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, isAuthenticated }}>
+
+    <AuthContext.Provider value={{ user, setUser, login, logout, isAuthenticated }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
 export const useAuth = () => useContext(AuthContext);
+
+export { AuthContext };

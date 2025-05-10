@@ -41,7 +41,7 @@ export const CartProvider = ({ children }) => {
       if (exists) {
         if (exists.quantity >= product.stock) {
           Alert.alert('Stock Limit Reached', `Only ${product.stock} in stock.`);
-          return prev; // do not update cart
+          return prev; 
         }
         Alert.alert('Added to Cart', `${product.name} quantity increased.`);
         return prev.map(item =>
@@ -52,7 +52,7 @@ export const CartProvider = ({ children }) => {
       } else {
         if (product.stock <= 0) {
           Alert.alert('Out of Stock', `${product.name} is not available.`);
-          return prev; // do not add to cart
+          return prev; 
         }
         Alert.alert('Added to Cart', `${product.name} added to cart.`);
         return [...prev, { ...product, quantity: 1 }];
@@ -78,3 +78,4 @@ export const CartProvider = ({ children }) => {
     </CartContext.Provider>
   );
 };
+

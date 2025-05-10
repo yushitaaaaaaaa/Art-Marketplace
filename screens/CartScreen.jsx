@@ -3,7 +3,6 @@ import { View, Text, FlatList, StyleSheet, Image, TouchableOpacity, Alert, Activ
 import { CartContext } from '../context/CartContext';
 import { AuthContext } from '../context/AuthContext';
 import axios from 'axios';
-import Header from '../components/Header';
 
 const CartScreen = () => {
   const { cartItems, removeFromCart, clearCart } = useContext(CartContext);
@@ -13,36 +12,42 @@ const CartScreen = () => {
   const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   const handlePlaceOrder = async () => {
-    if (!user || !user._id) {
-      Alert.alert('Login Required', 'Please login to place an order.');
-      return;
-    }
+  if (!user) {
+    Alert.alert('Login Required', 'Please login to place an order.');
+    return;
+  }
 
-    try {
-      setLoading(true);
-      const order = {
-        userId: user._id,
-        products: cartItems.map(item => ({
-          productId: item.id,
-          name: item.name,
-          price: item.price,
-        })),
-        totalAmount: total,
-      };
+  try {
+    setLoading(true);
+    
+    const order = {
+      userId: user._id,
+      products: cartItems.map(item => ({
+        productId: item.id,
+        name: item.name,
+        price: item.price,
+        quantity: item.quantity
+      })),
+      totalAmount: total
+    };
 
-      await axios.post('http://192.168.29.34:4545/api/orders', order);
-      Alert.alert('Success', 'Your order has been placed!');
-      clearCart();
-    } catch (error) {
-      console.error(error);
-      Alert.alert('Error', 'Failed to place order');
-    } finally {
-      setLoading(false);
-    }
-  };
+    console.log('Sending order:', JSON.stringify(order));
+    
+    const response = await axios.post('http://192.168.29.34:4545/api/orders', order);
+    console.log('Order response:', response.data);
+    
+    Alert.alert('Success', 'Your order has been placed!');
+    clearCart();
+  } catch (error) {
+    console.error('Order error:', error.response?.data || error.message);
+    Alert.alert('Error', 'Failed to place order. Please try again.');
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
-    <View style={styles.container}>      
+    <View style={styles.container}>
       {cartItems.length === 0 ? (
         <View style={styles.emptyContainer}>
           <Text style={styles.emptyText}>Your cart is empty</Text>

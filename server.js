@@ -2,34 +2,30 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const User = require("./models/User");
 const connectDB = require("./config/db");
-// const authRoutes = require("./routes/authRoutes");
+const authRoutes = require("./routes/authRoutes");
 const orderRoutes = require("./routes/orderRoutes");
+const userRoutes = require("./routes/userRoutes");
+const profileRoutes = require("./routes/profileRoutes");
 
 const app = express();
 connectDB();
 
 app.use(cors());
 app.use(bodyParser.json());
+
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.path}`);
+  next();
+});
+
+app.use('/api', authRoutes);
 app.use('/api', orderRoutes);
+app.use("/api", userRoutes);
+app.use("/api", profileRoutes);
 
-
-const User = require("./models/User"); 
-
-app.put("/api/update-profile", async (req, res) => {
-  const { phone, name, email, age } = req.body;
-  try {
-    const user = await User.findOneAndUpdate({ phone }, { name, email, age }, { new: true });
-    if (user) {
-      res.json({ success: true, user });
-    } else {
-      res.status(404).json({ error: "User not found" });
-    }
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Failed to update profile" });
-  }
+app.get('/api/test', (req, res) => {
+  res.json({ message: 'API is working' });
 });
 
 const PORT = 4545;

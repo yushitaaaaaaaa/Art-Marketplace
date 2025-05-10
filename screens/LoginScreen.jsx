@@ -5,7 +5,6 @@ import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../context/AuthContext';
 
-// Use your actual backend URL (for physical device testing, replace localhost with your computer's IP)
 const API_URL = 'http://192.168.29.34:4545';
 
 export const LoginScreen = () => {
@@ -53,10 +52,10 @@ export const LoginScreen = () => {
         code: otp 
       });
 
-      if (res.status === 200) {
-        login();
+
+      if (res.status === 200 && res.data.user) {
+        login(res.data.user); 
         Alert.alert('Success', 'You are now logged in!');
-        navigation.navigate('Home');
       }
     } catch (err) {
       console.error('Verify Error:', err.response?.data || err.message);

@@ -1,18 +1,10 @@
-const bodyParser = require("body-parser");
-const cors = require("cors");
 const twilio = require("twilio");
+const User = require("../models/User");
 
-const app = express();
-app.use(cors());
-app.use(bodyParser.json());
-
-const accountSid = process.env.TWILIO_ACCOUNT_SID;
-const authToken = process.env.TWILIO_AUTH_TOKEN;
+const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 const serviceSid = process.env.TWILIO_SERVICE_SID;
 
-const client = twilio(accountSid, authToken);
-
-app.post("/send-otp", async (req, res) => {
+exports.sendOTP = async (req, res) => {
   const { phone } = req.body;
   try {
     const verification = await client.verify.v2
@@ -23,25 +15,34 @@ app.post("/send-otp", async (req, res) => {
     console.error("Send OTP error:", error);
     res.status(500).send(error);
   }
-});
+};
 
-app.post("/verify-otp", async (req, res) => {
+exports.verifyOTP = async (req, res) => {
   const { phone, code } = req.body;
   try {
     const verificationCheck = await client.verify.v2
       .services(serviceSid)
       .verificationChecks.create({ to: `+91${phone}`, code });
+
     if (verificationCheck.status === "approved") {
-      res.status(200).send({ message: "Phone verified" });
+      let user = await User.findOne({ phone });
+      if (!user) user = await User.create({ phone });
+      res.status(200).json({ message: "Phone verified", user });
     } else {
-      res.status(400).send({ message: "Invalid OTP" });
+      res.status(400).json({ message: "Invalid OTP" });
     }
   } catch (error) {
     console.error("Verify OTP error:", error);
     res.status(500).send(error);
   }
-});
+};
 
-const PORT = 4545;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
+exports.getUser = async (req, res) => {
+  try {
+    const user = await User.findOne({ phone: req.params.phone });
+    if (!user) return res.status(404).send({ message: "User not found" });
+    res.status(200).json(user);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+};

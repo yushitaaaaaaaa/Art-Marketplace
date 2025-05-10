@@ -4,7 +4,6 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ActivityInd
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../context/AuthContext';
-import Header from '../components/Header';
 
 const API_URL = 'http://192.168.29.34:4545';
 
@@ -18,35 +17,19 @@ export const LoginScreen = () => {
 
   const sendOtp = async () => {
     try {
+
       if (!phone || phone.length !== 10 || isNaN(phone)) {
         Alert.alert('Invalid Number', 'Please enter a valid 10-digit phone number');
         return;
       }
       setLoading(true);
       const res = await axios.post(`${API_URL}/send-otp`, { phone });
-      if (res.status === 200) {
-        setOtpSent(true);
-        Alert.alert('OTP Sent', `OTP has been sent to +91${phone}`);
-      }
-    } catch (err) {
-      console.error('OTP Error:', err.response?.data || err.message);
-      const errorMessage = err.response?.data?.message || 'Failed to send OTP. Please try again.';
-      Alert.alert('Error', errorMessage);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const verifyOtp = async () => {
-    try {
-      if (!otp || otp.length < 4) {
-        Alert.alert('Invalid OTP', 'Please enter a valid 4-digit OTP');
-        return;
-      }
+      
       setLoading(true);
       const res = await axios.post(`${API_URL}/verify-otp`, { phone, code: otp });
       if (res.status === 200 && res.data.user) {
         login(res.data.user);
+
         Alert.alert('Success', 'You are now logged in!');
       }
     } catch (err) {
@@ -95,6 +78,7 @@ export const LoginScreen = () => {
                 style={styles.input}
                 editable={!loading}
               />
+
               <TouchableOpacity onPress={verifyOtp} style={styles.button} disabled={loading}>
                 {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>Verify OTP</Text>}
               </TouchableOpacity>
@@ -154,3 +138,4 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+

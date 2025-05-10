@@ -11,6 +11,7 @@ const ProfileScreen = () => {
   const [email, setEmail] = useState(user?.email || "");
   const [age, setAge] = useState(user?.age?.toString() || "");
 
+
   useEffect(() => {
     if (user) {
       axios.get(`http://192.168.29.34:4545/orders/${user.phone}`).then((res) => {
@@ -36,6 +37,7 @@ const ProfileScreen = () => {
   };
 
   return (
+
     <ScrollView style={styles.container}>
       <Header title="Profile" />
       <Text style={styles.heading}>👤 My Profile</Text>

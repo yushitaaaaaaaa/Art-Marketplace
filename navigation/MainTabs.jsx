@@ -47,7 +47,6 @@ export default function MainTabs() {
           } else if (route.name === 'Profile') {
             iconName = 'person-outline';
           }
-
           return <Ionicons name={iconName} size={size} color={color} />;
         },
         tabBarActiveTintColor: '#ff6f61',
@@ -57,6 +56,7 @@ export default function MainTabs() {
     >
       <Tab.Screen name="Home" component={HomeStack} />
       {/* <Tab.Screen name="Shop" component={ShopStack} /> */}
+
       <Tab.Screen
         name="Cart"
         component={CartScreen}
@@ -67,4 +67,3 @@ export default function MainTabs() {
       <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
   );
-}

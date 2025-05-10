@@ -16,7 +16,6 @@ export default [
       image: require("../assets/l1.jpg"),
       description: "Traditional Lippan art with mirror detailing.",
       stock: 1,
-    },
     {
       id: 3,
       name: "Bottle Art",
@@ -84,6 +83,7 @@ export default [
       id: 10,
       name: "Evil Eye Lippan Art",
       category: "Lippan Art",
+
       price: 699,
       image: require("../assets/el1.jpg"),
       description: "Handmade Evil Eye Lippan Art.",
@@ -154,20 +154,20 @@ export default [
     },
     {
       id: 18,
-      name: "Square Lippan Mirror Art",
-      category: "Lippan Art",
-      price: 1749,
+      name: "Bottle Art",
+      category: "Bottle Art",
+      price: 799,
       image: require("../assets/sl1.jpg"),
-      description: "Traditional Square Lippan art with mirror detailing.",
+      description: "Hand-painted bottle lamp for home decor.",
       stock: 1,
     },
     {
       id: 19,
-      name: "Square Lippan Mirror Art",
-      category: "Lippan Art",
-      price: 1749,
+      name: "Green Mirror Mosaic Art",
+      category: "Mirror Mosaic Art",
+      price: 1499,
       image: require("../assets/sl2.jpg"),
-      description: "Traditional Square Lippan art with mirror detailing.",
+      description: "Handcrafted mirror mosaic art frame.",
       stock: 1, 
     },
     {
@@ -180,4 +180,3 @@ export default [
       stock: 1,
     },
   ];
-        

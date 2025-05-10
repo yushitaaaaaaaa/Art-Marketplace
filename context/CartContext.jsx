@@ -8,7 +8,7 @@ export const useCart = () => useContext(CartContext);
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
 
-  // Load cart from AsyncStorage on app start
+
   useEffect(() => {
     const loadCart = async () => {
       try {
@@ -23,7 +23,6 @@ export const CartProvider = ({ children }) => {
     loadCart();
   }, []);
 
-  // Save cart to AsyncStorage on change
   useEffect(() => {
     const saveCart = async () => {
       try {
@@ -35,35 +34,12 @@ export const CartProvider = ({ children }) => {
     saveCart();
   }, [cartItems]);
 
-  const addToCart = (product) => {
-    setCartItems((prev) => {
-      const exists = prev.find(item => item.id === product.id);
-      if (exists) {
-        return prev.map(item =>
-          item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
-        );
-      } else {
-        return [...prev, { ...product, quantity: 1 }];
-      }
-    });
+    setCartItems((prev) => prev.filter(item => item.id !== id));
   };
-
-  const removeFromCart = (id) => {
-    setCartItems((prev) =>
-      prev
-        .map(item =>
-          item.id === id ? { ...item, quantity: item.quantity - 1 } : item
-        )
-        .filter(item => item.quantity > 0)
-    );
-  };
-
-  const clearCart = () => setCartItems([]);
 
   return (
-    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, clearCart }}>
+    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart }}>
       {children}
     </CartContext.Provider>
   );
 };
-

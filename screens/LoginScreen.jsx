@@ -24,6 +24,7 @@ export const LoginScreen = () => {
       }
       setLoading(true);
       const res = await axios.post(`${API_URL}/send-otp`, { phone });
+
       if (res.status === 200) {
         setOtpSent(true);
         Alert.alert('OTP Sent', `OTP has been sent to +91${phone}`);
@@ -43,10 +44,12 @@ export const LoginScreen = () => {
         Alert.alert('Invalid OTP', 'Please enter a valid 4-digit OTP');
         return;
       }
+      
       setLoading(true);
       const res = await axios.post(`${API_URL}/verify-otp`, { phone, code: otp });
       if (res.status === 200 && res.data.user) {
         login(res.data.user);
+
         Alert.alert('Success', 'You are now logged in!');
       }
     } catch (err) {
@@ -262,6 +265,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 4,
     elevation: 3,
+
   },
   buttonText: {
     color: '#fff',

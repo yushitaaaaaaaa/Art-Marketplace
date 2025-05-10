@@ -17,6 +17,7 @@ const HomeScreen = () => {
 
   const filteredData = products.filter((item) => {
     const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase());
+
     const matchesCategory =
       selectedCategory === 'All' ||
       item.category?.toLowerCase().trim() === selectedCategory.toLowerCase().trim();

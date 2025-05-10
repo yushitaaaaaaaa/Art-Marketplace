@@ -3,6 +3,7 @@ import { View, Text, FlatList, StyleSheet, Image, TouchableOpacity, Alert, Activ
 import { CartContext } from '../context/CartContext';
 import { AuthContext } from '../context/AuthContext';
 import axios from 'axios';
+import Header from '../components/Header';
 
 const CartScreen = () => {
   const { cartItems, removeFromCart, clearCart } = useContext(CartContext);
@@ -41,8 +42,7 @@ const CartScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
-      
+    <View style={styles.container}>      
       {cartItems.length === 0 ? (
         <View style={styles.emptyContainer}>
           <Text style={styles.emptyText}>Your cart is empty</Text>

@@ -5,13 +5,15 @@ const bodyParser = require("body-parser");
 const User = require("./models/User");
 const connectDB = require("./config/db");
 // const authRoutes = require("./routes/authRoutes");
-// const orderRoutes = require("./routes/orderRoutes");
+const orderRoutes = require("./routes/orderRoutes");
 
 const app = express();
 connectDB();
 
 app.use(cors());
 app.use(bodyParser.json());
+app.use('/api', orderRoutes);
+
 
 const User = require("./models/User"); 
 
@@ -32,12 +34,3 @@ app.put("/api/update-profile", async (req, res) => {
 
 const PORT = 4545;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
-
-
-
-
-
-
-
-

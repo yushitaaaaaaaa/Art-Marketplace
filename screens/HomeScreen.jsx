@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, FlatList, TextInput, Image, TouchableOpacity, StyleSheet, ScrollView, Dimensions } from 'react-native';
+import { View, Text, FlatList, TextInput, Image, TouchableOpacity, StyleSheet, ScrollView, Dimensions, SafeAreaView } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { useNavigation } from '@react-navigation/native';
 import products from '../data/Products';
-import Header from '../components/Header';
+import { Ionicons } from '@expo/vector-icons'; 
 
 const { height, width } = Dimensions.get('window');
-
 
 const HomeScreen = () => {
   const navigation = useNavigation();
@@ -18,10 +17,13 @@ const HomeScreen = () => {
 
   const filteredData = products.filter((item) => {
     const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = selectedCategory === 'All' || item.category === selectedCategory;
+
+    const matchesCategory =
+      selectedCategory === 'All' ||
+      item.category?.toLowerCase().trim() === selectedCategory.toLowerCase().trim();
     return matchesSearch && matchesCategory;
   });
-
+  
   const sortedData = [...filteredData].sort((a, b) => {
     if (sortOption === 'price') return a.price - b.price;
     return a.name.localeCompare(b.name);
@@ -31,29 +33,42 @@ const HomeScreen = () => {
     <TouchableOpacity
       style={styles.productItem}
       onPress={() => navigation.navigate('ProductDetails', { product: item })}>
-      <Image source={item.image} style={styles.productImage} />
-      <Text style={styles.productName}>{item.name}</Text>
-      <Text style={styles.productPrice}>₹{item.price}</Text>
+      <View style={styles.imageContainer}>
+        <Image source={item.image} style={styles.productImage} />
+      </View>
+      <View style={styles.productInfo}>
+        <Text style={styles.productName} numberOfLines={2}>{item.name}</Text>
+        <Text style={styles.productPrice}>₹{item.price}</Text>
+      </View>
     </TouchableOpacity>
   );
-
+  
   return (
-    <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <Header title="Home" />
-      </View>
-
+    <SafeAreaView style={styles.container}>
       <View style={styles.searchContainer}>
-        <TextInput
-          placeholder="Search products..."
-          value={searchQuery}
-          onChangeText={setSearchQuery}
-          style={styles.searchInput}
-        />
+        <View style={styles.searchInputContainer}>
+          <Ionicons name="search" size={20} color="#888" style={styles.searchIcon} />
+          <TextInput
+            placeholder="Search products..."
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+            style={styles.searchInput}
+            placeholderTextColor="#999"
+          />
+          {searchQuery !== '' && (
+            <TouchableOpacity onPress={() => setSearchQuery('')}>
+              <Ionicons name="close-circle" size={20} color="#888" />
+            </TouchableOpacity>
+          )}
+        </View>
       </View>
 
       <View style={styles.categoriesContainer}>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        <ScrollView 
+          horizontal 
+          showsHorizontalScrollIndicator={false} 
+          contentContainerStyle={styles.categoriesScrollView}
+        >
           {categories.map((category) => (
             <TouchableOpacity
               key={category}
@@ -76,15 +91,19 @@ const HomeScreen = () => {
         </ScrollView>
       </View>
 
-      <View style={styles.pickerContainer}>
-        <Picker
-          selectedValue={sortOption}
-          onValueChange={(value) => setSortOption(value)}
-          style={styles.picker}
-        >
-          <Picker.Item label="Sort by Name" value="name" />
-          <Picker.Item label="Sort by Price" value="price" />
-        </Picker>
+      <View style={styles.sortContainer}>
+        <View style={styles.pickerWrapper}>
+          <Picker
+            selectedValue={sortOption}
+            onValueChange={(value) => setSortOption(value)}
+            style={styles.picker}
+            dropdownIconColor="#ff6f61"
+          >
+            <Picker.Item label="Sort by Name" value="name" />
+            <Picker.Item label="Sort by Price" value="price" />
+          </Picker>
+        </View>
+        <Text style={styles.resultsText}>{sortedData.length} Products</Text>
       </View>
 
       <View style={styles.productListContainer}>
@@ -93,97 +112,154 @@ const HomeScreen = () => {
           keyExtractor={(item) => item.id.toString()}
           renderItem={renderItem}
           numColumns={2}
+          showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.productList}
+          columnWrapperStyle={styles.columnWrapper}
         />
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-  },
-  headerContainer: {
-    height: height * 0.1,
-    justifyContent: 'center',
+    backgroundColor: '#f8f9fa',
   },
   searchContainer: {
-    height: height * 0.1,
-    justifyContent: 'center',
-    paddingHorizontal: 12,
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+  },
+  searchInputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    paddingHorizontal: 15,
+    height: 50,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  searchIcon: {
+    marginRight: 10,
   },
   searchInput: {
-    height: 40,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    paddingHorizontal: 12,
-    borderRadius: 15,
+    flex: 1,
+    fontSize: 16,
+    color: '#333',
   },
   categoriesContainer: {
-    height: height * 0.05,
+    marginBottom: 10,
+    paddingHorizontal: 5,
+  },
+  categoriesScrollView: {
     paddingHorizontal: 10,
     paddingVertical: 5,
   },
   categoryButton: {
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    backgroundColor: '#eee',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    backgroundColor: '#fff',
     borderRadius: 20,
-    marginRight: 8,
+    marginRight: 10,
+    borderWidth: 1,
+    borderColor: '#eee',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 1,
+    elevation: 1,
   },
   selectedCategory: {
-    backgroundColor: '#007bff',
+    backgroundColor: '#ff6f61',
+    borderColor: '#ff6f61',
   },
   categoryText: {
-    color: '#333',
+    color: '#555',
     fontWeight: '500',
+    fontSize: 14,
   },
   selectedCategoryText: {
     color: '#fff',
+    fontWeight: '600',
   },
-  pickerContainer: {
+  sortContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 15,
+    marginBottom: 10,
+  },
+  pickerWrapper: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#eee',
+    width: 260,
+    overflow: 'hidden',
     height: height * 0.15,
     justifyContent: 'center',
     alignItems: 'flex-end',
     paddingHorizontal: 10,
   },
   picker: {
-    width: 200,
+    width: '100%',
+  },
+  resultsText: {
+    fontSize: 14,
+    color: '#777',
+    fontWeight: '500',
   },
   productListContainer: {
-    height: height * 0.5,
+    flex: 1,
     paddingHorizontal: 10,
   },
   productList: {
     paddingBottom: 20,
   },
+  columnWrapper: {
+    justifyContent: 'space-between',
+  },
   productItem: {
-    flex: 1,
-    margin: 8,
-    padding: 10,
-    backgroundColor: '#f9f9f9',
-    borderRadius: 12,
+    width: (width - 40) / 2,
+    marginBottom: 15,
+    backgroundColor: '#fff',
+    borderRadius: 15,
+    overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 3,
+  },
+  imageContainer: {
     alignItems: 'center',
-    elevation: 2,
+    justifyContent: 'center',
+    backgroundColor: '#f9f9f9',
+    paddingVertical: 15,
   },
   productImage: {
     width: 100,
     height: 100,
     resizeMode: 'contain',
-    marginBottom: 8,
-    borderRadius: 10,
+  },
+  productInfo: {
+    padding: 12,
   },
   productName: {
     fontSize: 14,
-    fontWeight: '600',
-    textAlign: 'center',
+    fontWeight: '500',
+    color: '#333',
+    marginBottom: 6,
+    height: 40,
   },
   productPrice: {
-    fontSize: 13,
-    color: 'green',
-    marginTop: 4,
+    fontSize: 16,
+    color: '#ff6f61',
+    fontWeight: '700',
   },
 });
 

@@ -1,77 +1,3 @@
-// import React, { useState } from 'react';
-// import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
-// import axios from 'axios';
-// import { useAuth } from '../context/AuthContext';
-
-// const API_URL = 'http://192.168.29.34:4545';
-
-// export const LoginScreen = () => {
-//   const [phone, setPhone] = useState('');
-//   const [otp, setOtp] = useState('');
-//   const [step, setStep] = useState(1);
-//   const { login } = useAuth();
-
-//   const handleSendOtp = async () => {
-//     try {
-//       await axios.post(`${API_URL}/send-otp`, { phone });
-//       Alert.alert('OTP Sent', 'Check your messages for the OTP');
-//       setStep(2);
-//     } catch (err) {
-//       Alert.alert('Error', 'Failed to send OTP');
-//     }
-//   };
-
-//   const handleVerifyOtp = async () => {
-//     try {
-//       const response = await axios.post(`${API_URL}/verify-otp`, { phone, code: otp });
-//       if (response.data.message === 'Phone verified') {
-//         login(response.data.user); // Save the returned user to context
-//       } else {
-//         Alert.alert('Invalid OTP', 'Please try again');
-//       }
-//     } catch (err) {
-//       console.error(err.response?.data || err);
-//       Alert.alert('Error', 'Verification failed');
-//     }
-//   };
-  
-//   return (
-//     <View style={styles.container}>
-//       <Text style={styles.title}>OTP Login</Text>
-//       {step === 1 ? (
-//         <>
-//           <TextInput
-//             placeholder="Enter Phone Number"
-//             keyboardType="phone-pad"
-//             value={phone}
-//             onChangeText={setPhone}
-//             style={styles.input}
-//           />
-//           <Button title="Send OTP" onPress={handleSendOtp} />
-//         </>
-//       ) : (
-//         <>
-//           <TextInput
-//             placeholder="Enter OTP"
-//             keyboardType="numeric"
-//             value={otp}
-//             onChangeText={setOtp}
-//             style={styles.input}
-//           />
-//           <Button title="Verify OTP" onPress={handleVerifyOtp} />
-//         </>
-//       )}
-//     </View>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   container: { flex: 1, justifyContent: 'center', padding: 20 },
-//   title: { fontSize: 24, fontWeight: 'bold', marginBottom: 20, textAlign: 'center' },
-//   input: {
-//     borderWidth: 1, borderColor: '#ccc', padding: 10, marginBottom: 15, borderRadius: 5
-//   }
-// });
 import { useState } from 'react';
 import { KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ActivityIndicator } from 'react-native';
@@ -79,7 +5,6 @@ import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../context/AuthContext';
 
-// Use your actual backend URL (for physical device testing, replace localhost with your computer's IP)
 const API_URL = 'http://192.168.29.34:4545';
 
 export const LoginScreen = () => {
@@ -126,6 +51,7 @@ export const LoginScreen = () => {
         phone, 
         code: otp 
       });
+
 
       if (res.status === 200 && res.data.user) {
         login(res.data.user); 

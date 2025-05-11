@@ -23,6 +23,7 @@ const ProfileScreen = () => {
   const [age, setAge] = useState(user?.age?.toString() || "");
   const [loading, setLoading] = useState(false);
   const [loadingOrders, setLoadingOrders] = useState(true);
+  const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -46,7 +47,6 @@ const ProfileScreen = () => {
   const fetchOrders = async () => {
     try {
       setLoadingOrders(true);
-      // Make sure this URL matches exactly what your server is expecting
       const res = await axios.get(`http://192.168.29.34:4545/api/orders/${user.phone}`);
       console.log('Fetched orders:', res.data);
       setOrders(res.data);
@@ -58,6 +58,9 @@ const ProfileScreen = () => {
     }
   };
 
+  const handleEdit = () => {
+    setIsEditing(true);
+  };
   const handleSave = async () => {
     try {
       setLoading(true);
@@ -76,6 +79,7 @@ const ProfileScreen = () => {
         email,
         age: parseInt(age) || 0,
       }));
+      setIsEditing(false);
       Alert.alert("Success", "Profile updated successfully");
     } catch (error) {
       console.error(error);
@@ -83,6 +87,13 @@ const ProfileScreen = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleCancel = () => {
+    setName(user?.name || "");
+    setEmail(user?.email || "");
+    setAge(user?.age?.toString() || "");
+    setIsEditing(false);
   };
 
   const handleLogout = () => {
@@ -99,7 +110,6 @@ const ProfileScreen = () => {
           onPress: async () => {
             await AsyncStorage.removeItem("user");
             logout();
-
             Alert.alert("Logged Out", "You have been logged out successfully.");
           },
           style: "destructive"
@@ -125,7 +135,7 @@ const ProfileScreen = () => {
       >
         <View style={styles.profileHeader}>
           <View style={styles.avatarContainer}>
-            <Ionicons name="person" size={60} color="#ff6f61" />
+            <Ionicons name="person" size={60} color="#2e8b83" />
           </View>
           <Text style={styles.welcomeText}>
             Hello, {name || user?.phone || "User"}
@@ -136,11 +146,22 @@ const ProfileScreen = () => {
         </View>
         
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Personal Information</Text>
+          <View style={styles.sectionHeader}>
+            <Text style={styles.sectionTitle}>Personal Information</Text>
+            {!isEditing && (
+              <TouchableOpacity 
+                style={styles.editButton} 
+                onPress={handleEdit}
+              >
+                <Ionicons name="create-outline" size={18} color="#fff" style={styles.buttonIcon} />
+                <Text style={styles.editButtonText}>Edit</Text>
+              </TouchableOpacity>
+            )}
+          </View>
           
           <View style={styles.inputGroup}>
             <Text style={styles.label}>Name</Text>
-            <View style={styles.inputContainer}>
+            <View style={[styles.inputContainer, !isEditing && styles.readOnlyInput]}>
               <Ionicons name="person-outline" size={20} color="#888" style={styles.inputIcon} />
               <TextInput 
                 style={styles.input} 
@@ -148,13 +169,14 @@ const ProfileScreen = () => {
                 onChangeText={setName} 
                 placeholder="Enter your name" 
                 placeholderTextColor="#aaa"
+                editable={isEditing}
               />
             </View>
           </View>
           
           <View style={styles.inputGroup}>
             <Text style={styles.label}>Email</Text>
-            <View style={styles.inputContainer}>
+            <View style={[styles.inputContainer, !isEditing && styles.readOnlyInput]}>
               <Ionicons name="mail-outline" size={20} color="#888" style={styles.inputIcon} />
               <TextInput 
                 style={styles.input} 
@@ -163,13 +185,14 @@ const ProfileScreen = () => {
                 placeholder="Enter your email" 
                 placeholderTextColor="#aaa"
                 keyboardType="email-address"
+                editable={isEditing}
               />
             </View>
           </View>
           
           <View style={styles.inputGroup}>
             <Text style={styles.label}>Age</Text>
-            <View style={styles.inputContainer}>
+            <View style={[styles.inputContainer, !isEditing && styles.readOnlyInput]}>
               <Ionicons name="calendar-outline" size={20} color="#888" style={styles.inputIcon} />
               <TextInput 
                 style={styles.input} 
@@ -179,21 +202,36 @@ const ProfileScreen = () => {
                 placeholderTextColor="#aaa"
                 keyboardType="numeric"
                 maxLength={3}
+                editable={isEditing}
               />
             </View>
           </View>
           
-          <TouchableOpacity 
-            style={styles.saveButton} 
-            onPress={handleSave}
-            disabled={loading}
-          >
-            {loading ? (
-              <ActivityIndicator size="small" color="#fff" />
-            ) : (
-              <Text style={styles.saveButtonText}>Save Changes</Text>
-            )}
-          </TouchableOpacity>
+          {isEditing && (
+            <View style={styles.buttonsContainer}>
+              <TouchableOpacity 
+                style={styles.cancelButton} 
+                onPress={handleCancel}
+              >
+                <Text style={styles.cancelButtonText}>Cancel</Text>
+              </TouchableOpacity>
+              
+              <TouchableOpacity 
+                style={styles.saveButton} 
+                onPress={handleSave}
+                disabled={loading}
+              >
+                {loading ? (
+                  <ActivityIndicator size="small" color="#fff" />
+                ) : (
+                  <>
+                    <Ionicons name="save-outline" size={18} color="#fff" style={styles.buttonIcon} />
+                    <Text style={styles.saveButtonText}>Save</Text>
+                  </>
+                )}
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
         
         <View style={styles.section}>
@@ -201,7 +239,7 @@ const ProfileScreen = () => {
           
           {loadingOrders ? (
             <View style={styles.loadingContainer}>
-              <ActivityIndicator size="large" color="#ff6f61" />
+              <ActivityIndicator size="large" color="#2e8b83" />
             </View>
           ) : orders.length === 0 ? (
             <View style={styles.emptyOrders}>
@@ -282,12 +320,11 @@ const styles = StyleSheet.create({
   welcomeText: {
     fontSize: 22,
     fontWeight: "bold",
-    color: "#333",
-    marginBottom: 5,
+    color: "#1d3d3b",
   },
   phoneText: {
     fontSize: 14,
-    color: "#777",
+    color: "#1d3d3b",
   },
   section: {
     backgroundColor: "#fff",
@@ -301,11 +338,32 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
     elevation: 2,
   },
+  sectionHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 20,
+  },
   sectionTitle: {
     fontSize: 18,
     fontWeight: "600",
-    color: "#333",
-    marginBottom: 20,
+    color: "#1d3d3b",
+  },
+  editButton: {
+    backgroundColor: "#ff4d4d",
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: 8,
+  },
+  editButtonText: {
+    color: "#fff",
+    fontSize: 14,
+    fontWeight: "600",
+  },
+  buttonIcon: {
+    marginRight: 6,
   },
   inputGroup: {
     marginBottom: 15,
@@ -325,6 +383,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#fafafa",
     paddingHorizontal: 12,
   },
+  readOnlyInput: {
+    backgroundColor: "#f0f0f0",
+    borderColor: "#e0e0e0",
+  },
   inputIcon: {
     marginRight: 10,
   },
@@ -334,15 +396,37 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#333",
   },
-  saveButton: {
-    backgroundColor: "#ff6f61",
-    borderRadius: 10,
-    paddingVertical: 14,
-    alignItems: "center",
+  buttonsContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
     marginTop: 10,
+  },
+  saveButton: {
+    backgroundColor: "#4caf50",
+    borderRadius: 10,
+    paddingVertical: 12,
+    paddingHorizontal: 18,
+    alignItems: "center",
+    flexDirection: "row",
+    flex: 1,
+    justifyContent: "center",
+    marginLeft: 10,
   },
   saveButtonText: {
     color: "#fff",
+    fontSize: 16,
+    fontWeight: "600",
+  },
+  cancelButton: {
+    backgroundColor: "#f0f0f0",
+    borderRadius: 10,
+    paddingVertical: 12,
+    paddingHorizontal: 18,
+    alignItems: "center",
+    flex: 1,
+  },
+  cancelButtonText: {
+    color: "#666",
     fontSize: 16,
     fontWeight: "600",
   },
@@ -370,8 +454,8 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 15,
     marginBottom: 12,
-    borderLeftWidth: 4,
-    borderLeftColor: "#ff6f61",
+    borderLeftWidth: 4,7
+    borderLeftColor: "#2e8b83",
   },
   orderHeader: {
     flexDirection: "row",
@@ -384,14 +468,15 @@ const styles = StyleSheet.create({
     color: "#555",
   },
   orderStatus: {
-    backgroundColor: "#E3F2FD",
+    borderColor: "#ff4d4d",
+    borderWidth: 1,
     paddingHorizontal: 10,
     paddingVertical: 3,
-    borderRadius: 12,
+    borderRadius: 8,
   },
   orderStatusText: {
     fontSize: 12,
-    color: "#1976D2",
+    color: "#ff4d4d",
     fontWeight: "500",
   },
   orderDetails: {
@@ -407,7 +492,7 @@ const styles = StyleSheet.create({
   orderTotal: {
     fontSize: 15,
     fontWeight: "600",
-    color: "#ff6f61",
+    color: "#2e8b83",
   },
   logoutButton: {
     backgroundColor: "#ff4d4d",

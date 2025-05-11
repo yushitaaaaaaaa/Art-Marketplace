@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, StatusBar } from 'react-native';
 
 const Header = ({ title }) => (
   <View style={styles.headerContainer}>
-    <StatusBar backgroundColor="#ff6f61" barStyle="light-content" />
+    <StatusBar backgroundColor="#2e8b83" barStyle="light-content" />
     <Text style={styles.headerText}>{title}</Text>
   </View>
 );
@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
   headerContainer: {
     paddingTop: 45,
     paddingBottom: 15,
-    backgroundColor: '#ff6f61',
+    backgroundColor: '#2e8b83',
     alignItems: 'center',
     borderBottomLeftRadius: 15,
     borderBottomRightRadius: 15,
@@ -31,4 +31,3 @@ const styles = StyleSheet.create({
 });
 
 export default Header;
-

@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
+import { KeyboardAvoidingView, ScrollView, Platform} from 'react-native';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ActivityIndicator, Image } from 'react-native';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
@@ -80,23 +80,27 @@ export const LoginScreen = () => {
         <View style={styles.container}>
           <View style={styles.logoContainer}>
             <View style={styles.logoCircle}>
-              <Ionicons name="person" size={60} color="#ff6f61" />
+              <Image
+                source={require('../assets/logo.jpg')}
+                style={styles.logoImage}
+                resizeMode="cover"
+              />
             </View>
-            <Text style={styles.greeting}>Welcome!</Text>
+            <Text style={styles.greeting}>Welcome to Art MarketPlace!</Text>
             <Text style={styles.subGreeting}>Login in to continue shopping</Text>
           </View>
 
           <View style={styles.card}>
             <View style={styles.inputContainer}>
               <View style={styles.iconContainer}>
-                <Ionicons name="call" size={22} color="#ff6f61" />
+                <Ionicons name="call" size={22} color="#2e8b83" />
               </View>
               <View style={styles.inputWrapper}>
                 <Text style={styles.label}>Phone Number</Text>
                 <View style={styles.phoneInputContainer}>
                   <Text style={styles.countryCode}>+91</Text>
                   <TextInput
-                    placeholder="Enter 10-digit number"
+                    placeholder="Enter 10-digit phone number"
                     placeholderTextColor="#aaa"
                     keyboardType="phone-pad"
                     maxLength={10}
@@ -128,7 +132,7 @@ export const LoginScreen = () => {
             <View style={[styles.card, styles.otpCard]}>
               <View style={styles.inputContainer}>
                 <View style={styles.iconContainer}>
-                  <Ionicons name="lock-closed" size={22} color="#ff6f61" />
+                  <Ionicons name="lock-closed" size={22} color="#2e8b83" />
                 </View>
                 <View style={styles.inputWrapper}>
                   <Text style={styles.label}>OTP Verification</Text>
@@ -177,28 +181,32 @@ const styles = StyleSheet.create({
     marginVertical: 30,
   },
   logoCircle: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    backgroundColor: '#fff',
+    width: 200,
+    height: 200,
+    borderRadius: 100,
     justifyContent: 'center',
     alignItems: 'center',
     shadowColor: '#000',
+    overflow: 'hidden',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.2,
     shadowRadius: 4,
     elevation: 4,
     marginBottom: 20,
   },
+    logoImage: {
+    width: "100%",
+    height: "100%",
+  },
   greeting: {
-    fontSize: 26,
+    fontSize: 20,
     fontWeight: 'bold',
-    color: '#333',
+    color: '#1d3d3b',
     marginBottom: 8,
   },
   subGreeting: {
     fontSize: 16,
-    color: '#777',
+    color: '#2e8b83',
   },
   card: {
     backgroundColor: '#fff',
@@ -267,12 +275,12 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   button: {
-    backgroundColor: '#ff6f61',
+    backgroundColor: '#2e8b83',
     marginTop: 10,
     paddingVertical: 15,
     borderRadius: 10,
     alignItems: 'center',
-    shadowColor: '#ff6f61',
+    shadowColor: '#2e8b83',
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.2,
     shadowRadius: 4,

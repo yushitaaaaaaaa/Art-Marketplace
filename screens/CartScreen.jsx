@@ -3,11 +3,15 @@ import { View, Text, FlatList, StyleSheet, Image, TouchableOpacity, Alert, Activ
 import { CartContext } from '../context/CartContext';
 import { AuthContext } from '../context/AuthContext';
 import axios from 'axios';
+import { useNavigation } from '@react-navigation/native';
+
 
 const CartScreen = () => {
   const { cartItems, removeFromCart, clearCart } = useContext(CartContext);
   const { user } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
+  const navigation = useNavigation();
+
 
   const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
@@ -52,6 +56,12 @@ const CartScreen = () => {
         <View style={styles.emptyContainer}>
           <Text style={styles.emptyText}>Your cart is empty</Text>
           <Text style={styles.emptySubText}>Add items to get started!</Text>
+          <TouchableOpacity 
+            style={styles.shopNowButton}
+            onPress={() => navigation.navigate('Home')}
+          >
+            <Text style={styles.shopNowText}>Buy Now</Text>
+          </TouchableOpacity>
         </View>
       ) : (
         <>
@@ -88,7 +98,7 @@ const CartScreen = () => {
             
             <View style={styles.buttonsContainer}>
               {loading ? (
-                <ActivityIndicator size="large" color="#ff6f61" />
+                <ActivityIndicator size="large" color="#2e8b83" />
               ) : (
                 <TouchableOpacity 
                   style={styles.placeOrderButton} 
@@ -164,7 +174,7 @@ const styles = StyleSheet.create({
   },
   price: { 
     fontSize: 18, 
-    color: '#ff6f61',
+    color: '#2e8b83',
     fontWeight: '600',
     marginBottom: 6,
   },
@@ -181,14 +191,13 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   removeButton: {
-    backgroundColor: '#fff0ef',
     padding: 8,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#ff6f61',
+    borderColor: '#2e8b83',
   },
   removeText: { 
-    color: '#ff6f61', 
+    color: '#2e8b83', 
     fontWeight: '600',
     fontSize: 14,
   },
@@ -233,7 +242,7 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   placeOrderButton: {
-    backgroundColor: '#ff6f61',
+    backgroundColor: '#2e8b83',
     padding: 15,
     borderRadius: 12,
     alignItems: 'center',
@@ -255,6 +264,18 @@ const styles = StyleSheet.create({
     color: '#777', 
     fontWeight: '600',
     fontSize: 16,
+  },
+  shopNowButton: {
+  marginTop: 20,
+  paddingVertical: 12,
+  paddingHorizontal: 24,
+  backgroundColor: '#2e8b83',
+  borderRadius: 12,
+},
+  shopNowText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
 

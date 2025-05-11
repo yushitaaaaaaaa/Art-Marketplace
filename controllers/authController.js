@@ -47,6 +47,7 @@ exports.verifyOTP = async (req, res) => {
     console.log(`Missing required fields: phone=${phone}, code=${code ? 'provided' : 'missing'}`);
     return res.status(400).json({ message: "Phone number and OTP code are required" });
   }
+
   try {
     const verificationCheck = await client.verify.v2
       .services(serviceSid)

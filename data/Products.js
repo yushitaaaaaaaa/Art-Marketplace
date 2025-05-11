@@ -7,6 +7,7 @@ export default [
       image: require("../assets/m1.jpg"),
       description: "Handmade Mandala on Pastel-painted Canvas with intricate designs.",
       stock: 1,
+      discount: 10,
     },
     {
       id: 2,
@@ -16,6 +17,7 @@ export default [
       image: require("../assets/l1.jpg"),
       description: "Traditional Lippan art with mirror detailing.",
       stock: 1,
+      discount: 20,
     },
     {
       id: 3,
@@ -25,6 +27,7 @@ export default [
       image: require("../assets/b1.jpg"),
       description: "Hand-painted bottle for home decor.",
       stock: 1,
+      discount: null,
     },
     {
       id: 4,
@@ -34,6 +37,7 @@ export default [
       image: require("../assets/redmm1.jpg"),
       description: "Handcrafted mirror mosaic art frame.",
       stock: 1, 
+      discount: 10,
     },
     {
       id: 5,
@@ -43,6 +47,7 @@ export default [
       image: require("../assets/whitemm1.jpg"),
       description: "Handcrafted mirror mosaic art frame.",
       stock: 1, 
+      discount: 10,
     },
     {
       id: 6,
@@ -52,6 +57,7 @@ export default [
       image: require("../assets/bluemm1.jpg"),
       description: "Handcrafted mirror mosaic art frame.",
       stock: 1, 
+      discount: 10,
     },
     {
       id: 7,
@@ -60,7 +66,8 @@ export default [
       price: 1499,
       image: require("../assets/greenmm1.jpg"),
       description: "Handcrafted mirror mosaic art frame.",
-      stock: 1, 
+      stock: 1,
+      discount: 10, 
     },
     {
       id: 8,
@@ -70,6 +77,7 @@ export default [
       image: require("../assets/l2.jpg"),
       description: "Traditional Lippan art with mirror detailing.",
       stock: 1,
+      discount: 20,
     },
     {
       id: 9,
@@ -79,6 +87,7 @@ export default [
       image: require("../assets/b2.jpg"),
       description: "Hand-painted bottle for home decor.",
       stock: 1,
+      discount: null,
     },
     {
       id: 10,
@@ -88,6 +97,7 @@ export default [
       image: require("../assets/el1.jpg"),
       description: "Handmade Evil Eye Lippan Art.",
       stock: 1,
+      discount: null,
     },
     {
       id: 11,
@@ -97,6 +107,7 @@ export default [
       image: require("../assets/el2.jpg"),
       description: "Handmade Evil Eye Lippan Art.",
       stock: 1,
+      discount: null,
     },
     {
       id: 12,
@@ -106,6 +117,7 @@ export default [
       image: require("../assets/el3.jpg"),
       description: "Handmade Evil Eye Lippan Art.",
       stock: 1,
+      discount: null,
     },
     {
       id: 13,
@@ -115,6 +127,7 @@ export default [
       image: require("../assets/kbmm1.jpg"),
       description: "Handcrafted mirror mosaic art keychain.",
       stock: 1, 
+      discount: null,
     },
     {
       id: 14,
@@ -124,6 +137,7 @@ export default [
       image: require("../assets/kwmm1.jpg"),
       description: "Handcrafted mirror mosaic art keychain.",
       stock: 1, 
+      discount: null,
     },
     {
       id: 15,
@@ -133,6 +147,7 @@ export default [
       image: require("../assets/kbmm2.jpg"),
       description: "Handcrafted mirror mosaic art keychain.",
       stock: 1, 
+      discount: null,
     },
     {
       id: 16,
@@ -141,7 +156,8 @@ export default [
       price: 99,
       image: require("../assets/kwmm2.jpg"),
       description: "Handcrafted mirror mosaic art keychain.",
-      stock: 1, 
+      stock: 1,
+      discount: null, 
     },
     {
       id: 17,
@@ -151,6 +167,7 @@ export default [
       image: require("../assets/pl1.jpg"),
       description: "Traditional Square Lippan art in Pastel colours with mirror detailing.",
       stock: 2,
+      discount: 10,
     },
     {
       id: 18,
@@ -160,6 +177,7 @@ export default [
       image: require("../assets/sl1.jpg"),
       description: "Traditional Square Lippan art with mirror detailing.",
       stock: 1,
+      discount: 15,
     },
     {
       id: 19,
@@ -169,6 +187,7 @@ export default [
       image: require("../assets/sl2.jpg"),
       description: "Traditional Square Lippan art with mirror detailing.",
       stock: 1, 
+      discount: 15,
     },
     {
       id: 20,
@@ -178,5 +197,6 @@ export default [
       image: require("../assets/sl3.jpg"),
       description: "Traditional Square Lippan art with mirror detailing.",
       stock: 1,
+      discount: 15,
     },
   ];

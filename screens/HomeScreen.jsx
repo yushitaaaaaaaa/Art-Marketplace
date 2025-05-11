@@ -28,16 +28,37 @@ const HomeScreen = () => {
     return a.name.localeCompare(b.name);
   });
 
-  const renderItem = ({ item }) => (
+  const getDiscountedPrice = (item) => {
+    if (item.discount && item.discount > 0) {
+      return Math.round(item.price - (item.price * item.discount / 100));
+    }
+    return item.price;
+  };
+
+  const renderItem = ({ item }) => ( 
     <TouchableOpacity
       style={styles.productItem}
       onPress={() => navigation.navigate('ProductDetails', { product: item })}>
       <View style={styles.imageContainer}>
         <Image source={item.image} style={styles.productImage} />
+        {item.discount > 0 && (
+          <View style={styles.discountBadge}>
+            <Text style={styles.discountText}>-{item.discount}%</Text>
+          </View>
+        )}
       </View>
       <View style={styles.productInfo}>
         <Text style={styles.productName} numberOfLines={2}>{item.name}</Text>
-        <Text style={styles.productPrice}>₹{item.price}</Text>
+        <View style={styles.priceContainer}>
+          {item.discount > 0 ? (
+            <>
+              <Text style={styles.originalPrice}>₹{item.price}</Text>
+              <Text style={styles.productPrice}>₹{getDiscountedPrice(item)}</Text>
+            </>
+          ) : (
+            <Text style={styles.productPrice}>₹{item.price}</Text>
+          )}
+        </View>
       </View>
     </TouchableOpacity>
   );
@@ -48,7 +69,7 @@ const HomeScreen = () => {
         <View style={styles.searchInputContainer}>
           <Ionicons name="search" size={20} color="#888" style={styles.searchIcon} />
           <TextInput
-            placeholder="Search products..."
+            placeholder="Search Products"
             value={searchQuery}
             onChangeText={setSearchQuery}
             style={styles.searchInput}
@@ -96,7 +117,7 @@ const HomeScreen = () => {
             selectedValue={sortOption}
             onValueChange={(value) => setSortOption(value)}
             style={styles.picker}
-            dropdownIconColor="#ff6f61"
+            dropdownIconColor="#2e8b83"
           >
             <Picker.Item label="Sort by Name" value="name" />
             <Picker.Item label="Sort by Price" value="price" />
@@ -106,6 +127,9 @@ const HomeScreen = () => {
       </View>
 
       <View style={styles.productListContainer}>
+        {sortedData.length === 0 ? (
+          <Text style={styles.noResults}>No products found</Text>
+        ) : (
         <FlatList
           data={sortedData}
           keyExtractor={(item) => item.id.toString()}
@@ -115,6 +139,7 @@ const HomeScreen = () => {
           contentContainerStyle={styles.productList}
           columnWrapperStyle={styles.columnWrapper}
         />
+        )}
       </View>
     </SafeAreaView>
   );
@@ -173,8 +198,8 @@ const styles = StyleSheet.create({
     elevation: 1,
   },
   selectedCategory: {
-    backgroundColor: '#ff6f61',
-    borderColor: '#ff6f61',
+    backgroundColor: '#2e8b83',
+    borderColor: '#2e8b83',
   },
   categoryText: {
     color: '#555',
@@ -196,7 +221,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#eee',
+    borderColor: '#2e8b83',
     width: 260,
     overflow: 'hidden',
     height: height * 0.15,
@@ -237,12 +262,27 @@ const styles = StyleSheet.create({
   imageContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#f9f9f9',
+    backgroundColor: '#fff',
     paddingVertical: 15,
+    borderRadius: 10,
+  },
+  discountBadge: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    backgroundColor: '#FF3B30',
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 10,
+  },
+  discountText: {
+    color: '#FFFFFF',
+    fontWeight: '700',
+    fontSize: 10,
   },
   productImage: {
-    width: 100,
-    height: 100,
+    width: 120,
+    height: 120,
     resizeMode: 'contain',
   },
   productInfo: {
@@ -255,10 +295,22 @@ const styles = StyleSheet.create({
     marginBottom: 6,
     height: 40,
   },
+  originalPrice: {
+    fontSize: 12,
+    color: '#999',
+    textDecorationLine: 'line-through',
+    marginRight: 6,
+  },
   productPrice: {
     fontSize: 16,
-    color: '#ff6f61',
+    color: '#2e8b83',
     fontWeight: '700',
+  },
+  noResults: {
+    textAlign: 'center',
+    marginTop: 20,
+    fontSize: 16,
+    color: '#888',
   },
 });
 

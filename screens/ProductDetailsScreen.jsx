@@ -11,11 +11,19 @@ const ProductDetailsScreen = ({ route, navigation }) => {
     addToCart(product);
   };
 
+  const discountedPrice = product.discount 
+    ? Math.round(product.price - (product.price * product.discount / 100))
+    : product.price;
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.imageContainer}>
           <Image source={product.image} style={styles.image} />
+          {product.discount > 0 && (
+            <View style={styles.discountBadge}>
+              <Text style={styles.discountText}>-{product.discount}%</Text>
+            </View>
+          )}
         </View>
         
         <View style={styles.detailsContainer}>
@@ -24,8 +32,21 @@ const ProductDetailsScreen = ({ route, navigation }) => {
           </View>
           
           <Text style={styles.name}>{product.name}</Text>
-          <Text style={styles.price}>₹{product.price}</Text>
-          
+          <View style={styles.priceContainer}>
+            {product.discount > 0 ? (
+              <>
+                <Text style={styles.originalPrice}>₹{product.price}</Text>
+                <Text style={styles.price}>₹{discountedPrice}</Text>
+                <View style={styles.savingsBadge}>
+                  <Text style={styles.savingsText}>
+                    Save ₹{product.price - discountedPrice}
+                  </Text>
+                </View>
+              </>
+            ) : (
+              <Text style={styles.price}>₹{product.price}</Text>
+            )}
+          </View>
           <View style={styles.divider} />
           
           <View style={styles.stockContainer}>
@@ -121,9 +142,27 @@ const styles = StyleSheet.create({
   },
   price: {
     fontSize: 26,
-    color: '#ff6f61',
+    color: '#2e8b83',
     fontWeight: '700',
     marginBottom: 15,
+  },
+  originalPrice: {
+    fontSize: 18,
+    color: '#999',
+    textDecorationLine: 'line-through',
+    marginRight: 10, 
+  },
+  savingsBadge: {
+    backgroundColor: '#4CAF50',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 4,
+    marginLeft: 10,
+  },
+  savingsText: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: '600',
   },
   divider: {
     height: 1,
@@ -170,7 +209,7 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   addToCartButton: {
-    backgroundColor: '#ff6f61',
+    backgroundColor: '#2e8b83',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
@@ -187,6 +226,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: '600',
+  },
 });
 
 export default ProductDetailsScreen;

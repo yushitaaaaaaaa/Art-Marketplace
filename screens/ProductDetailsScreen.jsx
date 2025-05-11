@@ -14,7 +14,6 @@ const ProductDetailsScreen = ({ route, navigation }) => {
   const discountedPrice = product.discount 
     ? Math.round(product.price - (product.price * product.discount / 100))
     : product.price;
-
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -33,8 +32,6 @@ const ProductDetailsScreen = ({ route, navigation }) => {
           </View>
           
           <Text style={styles.name}>{product.name}</Text>
-
-          {/* <Text style={styles.price}>₹{product.price}</Text> */}
           <View style={styles.priceContainer}>
             {product.discount > 0 ? (
               <>
@@ -50,7 +47,6 @@ const ProductDetailsScreen = ({ route, navigation }) => {
               <Text style={styles.price}>₹{product.price}</Text>
             )}
           </View>
-
           <View style={styles.divider} />
           
           <View style={styles.stockContainer}>

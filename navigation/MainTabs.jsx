@@ -34,20 +34,21 @@ function HomeStack() {
 
 export default function MainTabs() {
   const { cartItems } = useCart();
-  
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarIcon: ({ color, size }) => {
           let iconName;
-          
+
           if (route.name === 'Home') {
+            iconName = 'home-outline';
           } else if (route.name === 'Cart') {
             iconName = 'cart-outline';
           } else if (route.name === 'Profile') {
             iconName = 'person-outline';
           }
-          
+
           return <Ionicons name={iconName} size={size} color={color} />;
         },
         tabBarActiveTintColor: '#2e8b83',
@@ -76,3 +77,4 @@ export default function MainTabs() {
     </Tab.Navigator>
   );
 }
+

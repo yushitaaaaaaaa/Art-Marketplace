@@ -12,6 +12,7 @@ const CartScreen = () => {
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
 
+
   const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   const handlePlaceOrder = async () => {
@@ -51,7 +52,6 @@ const CartScreen = () => {
 
   return (
     <View style={styles.container}>
-      
       {cartItems.length === 0 ? (
         <View style={styles.emptyContainer}>
           <Text style={styles.emptyText}>Your cart is empty</Text>

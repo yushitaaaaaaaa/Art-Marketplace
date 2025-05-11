@@ -61,13 +61,11 @@ const ProfileScreen = () => {
   const handleEdit = () => {
     setIsEditing(true);
   };
-
   const handleSave = async () => {
     try {
       setLoading(true);
       const updated = { phone: user.phone, name, email, age: parseInt(age) || 0 };
       await axios.put("http://192.168.29.34:4545/api/update-profile", updated);
-
       setUser((prevUser) => ({
         ...prevUser,
         name,
@@ -81,7 +79,6 @@ const ProfileScreen = () => {
         email,
         age: parseInt(age) || 0,
       }));
-
       setIsEditing(false);
       Alert.alert("Success", "Profile updated successfully");
     } catch (error) {
@@ -93,7 +90,6 @@ const ProfileScreen = () => {
   };
 
   const handleCancel = () => {
-    // Revert to original values
     setName(user?.name || "");
     setEmail(user?.email || "");
     setAge(user?.age?.toString() || "");
@@ -114,7 +110,6 @@ const ProfileScreen = () => {
           onPress: async () => {
             await AsyncStorage.removeItem("user");
             logout();
-            
             Alert.alert("Logged Out", "You have been logged out successfully.");
           },
           style: "destructive"
@@ -326,7 +321,6 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: "bold",
     color: "#1d3d3b",
-    marginBottom: 5,
   },
   phoneText: {
     fontSize: 14,
@@ -460,7 +454,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 15,
     marginBottom: 12,
-    borderLeftWidth: 4,
+    borderLeftWidth: 4,7
     borderLeftColor: "#2e8b83",
   },
   orderHeader: {

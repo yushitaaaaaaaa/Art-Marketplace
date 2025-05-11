@@ -60,7 +60,6 @@ export const CartProvider = ({ children }) => {
     });
   };
   
-
   const removeFromCart = (id) => {
     setCartItems((prev) =>
       prev
@@ -79,4 +78,3 @@ export const CartProvider = ({ children }) => {
     </CartContext.Provider>
   );
 };
-

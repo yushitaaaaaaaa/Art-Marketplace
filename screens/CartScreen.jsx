@@ -5,6 +5,7 @@ import { AuthContext } from '../context/AuthContext';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 
+const API_URL = '{YOUR_IPv4_ADDRESS}/api';
 
 const CartScreen = () => {
   const { cartItems, removeFromCart, clearCart } = useContext(CartContext);

@@ -9,7 +9,7 @@
 <img src="https://github.com/user-attachments/assets/81b78b43-3515-4736-a81b-bc7cc574cd3c" alt="Home Screen" width="240"/>
 
 <img src="https://github.com/user-attachments/assets/5b828518-4e03-4623-bd83-1c261328216f" alt="Product Details Screen" width="240"/>
-
+<br>
 <img src="https://github.com/user-attachments/assets/4c469a91-2b1c-4684-be0c-25e338c5f9a8" alt="Cart Screen" width="240"/>
 
 <img src="https://github.com/user-attachments/assets/7ea9cadd-22a2-424a-8d7d-f696802c117c" alt="Empty Cart" width="240"/>

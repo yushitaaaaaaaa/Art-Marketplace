@@ -38,7 +38,7 @@ const CartScreen = () => {
 
     console.log('Sending order:', JSON.stringify(order));
     
-    const response = await axios.post('http://192.168.29.34:4545/api/orders', order);
+    const response = await axios.post('${API_URL}/orders', order);
     console.log('Order response:', response.data);
     
     Alert.alert('Success', 'Your order has been placed!');

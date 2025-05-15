@@ -13,13 +13,17 @@ A mobile application built with **React Native** that enables users to browse, v
 - Styled the app with a **custom logo** and a **color palette** based on original artwork branding.
 - **Future enhancement:** Integration of a **payment gateway** (e.g., Razorpay or Stripe) for secure online transactions.
 
+
 ## 🛠️ Tech Stack
 
-- **React Native** with **Expo**
-- **Twilio** for OTP authentication
-- **React Navigation** for screen transitions
-- **AsyncStorage** for local data persistence
-- **Custom components** for UI consistency
+- **React Native** with **Expo** – for cross-platform mobile app development
+- **MongoDB** – NoSQL database for storing user data and orders
+- **Express.js** – Backend framework for API endpoints and business logic
+- **Twilio** – OTP authentication service
+- **React Navigation** – For managing app navigation
+- **AsyncStorage** – For local data persistence
+- **Custom components** – For reusable and consistent UI elements
+
 
 ## 📸 Assets & Copyright
 
